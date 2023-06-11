@@ -1,0 +1,125 @@
+package solvingSudoku;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Sudoku {
+	
+	// Data fields
+	private char[][] board = new char[9][9];
+	// Default Constructor
+	public Sudoku()
+	{
+		
+	}
+	// Constructor with a board parameter
+	public Sudoku(char[][] board)
+	{
+		this.board = board;
+	}
+	// Getters and Setters
+	public char[][] getBoard() {
+		return board;
+	}
+
+	public void setBoard(char[][] board) {
+		this.board = board;
+	}
+	// method to check if the sudoku is valid or not
+	public static boolean check(char[][] arr, int row, int col, char num)
+	{
+		// check if every row doesn't have a repeated number
+		for(int i = 0; i < 9; i++)
+		{
+			if(arr[row][i] == num)
+			{
+				return false;
+			}
+		}
+		// check if every column doesn't have a repeated number
+		for(int i = 0; i < 9; i++)
+		{
+			if(arr[i][col] == num)
+			{
+				return false;
+			}
+		}
+		// calculating the row and column index of every box in the board
+		int rowBox = 3 * (row / 3);
+		int colBox = 3 * (col / 3);
+		// nested loop to iterate over every box in the board 
+		// to make sure it doesn't have repeated number
+		for(int i = rowBox; i < rowBox + 3; i++)
+		{
+			for(int j = colBox; j < colBox + 3; j++)
+			{
+				if(arr[i][j] == num)
+				{
+					return false;
+				}
+			}
+		}		
+		return true;
+	}
+	// method to solve the Sudoku using backtracking
+	public static boolean solved(char[][] board)
+	{
+		char[] domain = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+		// nested loops to iterate over the board and check if 
+		// the input number is valid by calling the check method
+		// And if the solved method is true, simply returns true
+		// If not, then it sets the character back to '.'
+		for(int i = 0; i < board.length; i++)
+		{
+			for(int j = 0; j < board[i].length; j++)
+			{
+				if(board[i][j] == '.')
+				{
+					for(int r = 0; r < domain.length; r++)
+					{
+						if(check(board, i, j, domain[r]))
+						{
+							board[i][j] = domain[r];
+							if(solved(board))
+							{
+								return true;
+							}
+							else
+							{
+								board[i][j] = '.';
+							}
+						}
+					}
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	// toString method to print the board
+	@Override
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < this.board.length; i++)
+		{
+			if(i % 3 == 0 && i != 0)
+			{
+				sb.append("-----------------------\n");
+			}
+			for(int j = 0; j < this.board[i].length; j++)
+			{
+				if(j % 3 == 0 && j != 0)
+				{
+					sb.append(" | ");
+				}
+				sb.append(board[i][j] + " ");
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+
+}
