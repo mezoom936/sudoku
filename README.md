@@ -1,2 +1,1 @@
-# sudoku
-# solving sudoku using backtracking in Java
+# sudoku solving using backtracking in Java
